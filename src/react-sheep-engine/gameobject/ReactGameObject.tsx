@@ -1,21 +1,22 @@
-import { Fragment, PropsWithChildren, useEffect, useLayoutEffect, useState } from "react";
-import { useGameLoop } from "../loop";
-import { GameComponent, GameComponentInstanceDefinition } from "./GameComponent";
-import { GameObject } from "./GameObject";
-import { useTransform } from "./transform/useTransform";
+import {Fragment, PropsWithChildren, useEffect, useLayoutEffect, useState} from "react";
+import {useGameLoop} from "../loop";
+import {GameComponent, GameComponentInstanceDefinition} from "./GameComponent";
+import {GameObject} from "./GameObject";
+import {TransformProps, useTransform} from "./transform";
 
 export type ReactGameObjectProps = {
-    active: boolean;
+    active?: boolean;
     name?: string;
-    components: typeof GameComponent[]
+    components: typeof GameComponent[];
+    transform?: TransformProps;
 };
 
 export function ReactGameObject(props: PropsWithChildren<ReactGameObjectProps>) {
     const loop = useGameLoop();
 
     const [name, setName] = useState(props?.name || "GameObject");
-    const [active, setActive] = useState(props.active);
-    const transform = useTransform();
+    const [active, setActive] = useState(props.active !== undefined ? props.active : true);
+    const transform = useTransform(props?.transform);
 
     const [components, setComponents] = useState<GameComponent[]>([]);
 
@@ -49,9 +50,12 @@ export function ReactGameObject(props: PropsWithChildren<ReactGameObjectProps>) 
         loop.registerObject(gameObject);
     }, []);
 
-
     return <Fragment>
-        {gameObject.components.map((comp, i) => <Fragment key={i}>{comp.Render()}</Fragment>)}
+        {components.map((comp, i) => {
+            return <Fragment key={i + " : " + transform.position.x}>
+                {comp.Render(transform.position, transform.rotation)}
+            </Fragment>
+        })}
         {props.children}
     </Fragment>
 }

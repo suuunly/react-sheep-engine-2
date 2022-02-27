@@ -1,5 +1,5 @@
-import { GameComponent, GameComponentInstanceDefinition } from "./GameComponent";
-import { Transform } from "./transform/Transform";
+import {GameComponent, GameComponentInstanceDefinition} from "./GameComponent";
+import {Transform} from "./transform";
 
 export type GameObject = {
     name: Readonly<string>

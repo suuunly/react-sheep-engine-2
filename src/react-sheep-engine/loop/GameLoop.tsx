@@ -1,6 +1,6 @@
-import { PropsWithChildren, useCallback, useState } from "react";
-import { GameObject } from "../gameobject/GameObject";
-import { GameLoopContext } from "./GameLoopContext";
+import {PropsWithChildren, useCallback, useState} from "react";
+import {GameObject} from "../gameobject/GameObject";
+import {GameLoopContext} from "./GameLoopContext";
 
 export function GameLoop(props: PropsWithChildren<{}>) {
     const [objects, setObject] = useState<GameObject[]>([]);
@@ -13,10 +13,13 @@ export function GameLoop(props: PropsWithChildren<{}>) {
     }
 
     const updateLoop = (now: number) => {
-        requestAnimationFrame(updateLoop);
+
+        // Updates
         objects.forEach(obj => {
             obj.components.forEach(comp => comp.enabled && comp.Update(now));
         });
+        
+        window.requestAnimationFrame(updateLoop);
     }
 
     const start = useCallback(() => {
@@ -29,7 +32,7 @@ export function GameLoop(props: PropsWithChildren<{}>) {
 
 
     return (
-        <GameLoopContext.Provider value={{ registerObject, start }}>
+        <GameLoopContext.Provider value={{registerObject, start}}>
             {props.children}
         </GameLoopContext.Provider>
     );

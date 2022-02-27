@@ -1,18 +1,15 @@
-import { ReactNode } from "react";
-import { GameComponent } from "../gameobject/GameComponent";
+import {ReactNode} from "react";
+import {GameComponent} from "../gameobject/GameComponent";
+import {Vector2} from "../core/maths";
 
 export class TextRenderer extends GameComponent {
 
     public text: string = "Hello World";
 
-    public Render(): ReactNode {
-
-        const pos = this.transform.position;
-        console.log("Hello World", pos);
-
+    public Render(position: Vector2, rotation: number): ReactNode {
         return <p style={{
             position: "absolute",
-            transform: `translate(${pos.x}, ${pos.y})`
+            transform: `translate(${position.x}px, ${position.y}px) rotate(${rotation}deg)`
         }}>{this.text}</p>
     }
 }
